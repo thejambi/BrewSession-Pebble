@@ -253,3 +253,4 @@ canvas { image-rendering: pixelated; display: block; }
 
 .about-text { color: #fff; font-size: 18px; font-weight: bold; text-align: center; line-height: 1.5; }
 .about-faint { color: var(--faint); font-size: 14px; text-align: center; line-height: 1.5; margin-top: 10px; }
+.about-link { color: var(--tea); font-weight: bold; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; margin-top: 14px; }

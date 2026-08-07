@@ -83,3 +83,5 @@ html, body {
   text-align: center;
   line-height: 1.5;
 }
+
+.hintlink { color: #00aa55; text-decoration: none; font-weight: 600; }

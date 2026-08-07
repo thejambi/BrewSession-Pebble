@@ -485,7 +485,8 @@ const scrAbout = {
         h('div', { class: 'about-text' }, 'A timer that knows which infusion you’re on.'),
         cup.el,
         h('div', { class: 'about-faint' },
-          'Keep this tab open while steeping — a closed tab is a silent kettle. Also lives on Pebble watches.')));
+          'Keep this tab open while steeping — a closed tab is a silent kettle. Also lives on Pebble watches.'),
+        h('a', { class: 'about-link', href: 'watch.html' }, 'the watch-look original')));
   },
 };
 

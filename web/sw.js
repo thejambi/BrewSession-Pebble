@@ -1,11 +1,11 @@
 // Offline shell: cache-first for the app's own files, because a tea timer
 // that needs the network is a broken kettle of a different kind.
-const CACHE = 'brewsession-web-v2';
+const CACHE = 'brewsession-web-v3';
 const ASSETS = [
-  './', './index.html', './style.css', './manifest.webmanifest',
-  './js/main.js', './js/windows.js', './js/session.js',
-  './js/digits.js', './js/cup.js', './js/colors.js',
-  './icons/icon-192.png', './icons/icon-512.png',
+  './', './index.html', './mobile.css', './js/mobile.js',
+  './watch.html', './style.css', './js/main.js', './js/windows.js',
+  './js/session.js', './js/digits.js', './js/cup.js', './js/colors.js',
+  './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png',
 ];
 
 self.addEventListener('install', (e) => {

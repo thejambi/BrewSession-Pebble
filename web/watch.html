@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>BrewSession</title>
+<meta name="theme-color" content="#101010">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="watch">
+  <div class="btn-col left">
+    <button class="btn" data-btn="back" aria-label="Back"></button>
+  </div>
+  <div class="body">
+    <div class="bezel">
+      <canvas id="screen" width="200" height="228"></canvas>
+    </div>
+    <div class="brand">pebble</div>
+  </div>
+  <div class="btn-col right">
+    <button class="btn" data-btn="up" aria-label="Up"></button>
+    <button class="btn select" data-btn="select" aria-label="Select"></button>
+    <button class="btn" data-btn="down" aria-label="Down"></button>
+  </div>
+</div>
+<p class="hint">arrows / enter / esc &middot; or touch the screen &mdash; it drags, taps, and swipes like the Time 2<br><a class="hintlink" href="./">&larr; the phone app</a></p>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
