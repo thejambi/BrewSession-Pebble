@@ -1,0 +1,15 @@
+A tea timer that knows which infusion you're on.
+
+Set a custom steep time as fast as the stock timer - no tea database, no menu asking which infusion this is. Hit Start and pour during the felt countdown: a tick on your wrist each second, one long buzz at "go." When the steep ends the watch buzzes until you shake it off. Come back for round two and the app already knows - "Infusion 2" is waiting with its time computed.
+
+The per-infusion increment is asked for exactly once, and only when you commit to a second infusion. If you never brew one, you're never asked. Steeping shorter as you go? Negative increments are first-class.
+
+* Recents are the presets: your last sessions, one press to rebrew
+* The on-screen teacup fills with tea as the steep runs
+* Skip infusions, adjust a running steep +/-5s, abandon with a long press
+* The alarm survives the app being closed - a scheduled wakeup relaunches it at the right moment
+* Hand-drawn tabular digits, so the countdown never shimmies
+* Touch on Pebble Time 2: drag the picker wheel, tap to start, tap to dismiss - and every button still does what it always did
+* A setting to open straight into your brew session
+
+No phone connection needed after install.

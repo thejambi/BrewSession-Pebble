@@ -15,7 +15,7 @@ static void draw(Layer *layer, GContext *ctx) {
                      GRect(0, y, b.size.w, 28),
                      GTextOverflowModeTrailingEllipsis, GTextAlignmentCenter, NULL);
   graphics_context_set_text_color(ctx, COL_DIM);
-  graphics_draw_text(ctx, "v0.1.0", fonts_get_system_font(FONT_KEY_GOTHIC_14),
+  graphics_draw_text(ctx, "v1.0.0", fonts_get_system_font(FONT_KEY_GOTHIC_14),
                      GRect(0, y + 28, b.size.w, 16),
                      GTextOverflowModeTrailingEllipsis, GTextAlignmentCenter, NULL);
 
