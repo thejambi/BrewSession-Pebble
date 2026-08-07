@@ -123,7 +123,9 @@ static void updown(int d, bool repeated) {
       session_dismiss();
       break;
     case PH_STEEPING:
-      session_adjust_running(d * 5);   // hold to keep feeding it (R11)
+      // Up gives the leaves more time, Down takes it away — the same
+      // direction the picker's buttons already taught (hold to repeat, R11).
+      session_adjust_running(-d * 5);
       redraw();
       break;
     case PH_READY:
