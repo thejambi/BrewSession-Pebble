@@ -19,7 +19,7 @@ static bool s_confirm;   // abandon? awaiting the confirming Select
 static void redraw(void) { if (s_layer) layer_mark_dirty(s_layer); }
 
 // ---- pour countdown (R7, R7a) ----------------------------------------------
-// Felt, not just seen: a tick each second, a double-pulse at "go", so the
+// Felt, not just seen: a tick each second, a long buzz at "go", so the
 // wrist carries the count through the steam.
 
 static void pour_tick_pulse(void) {
@@ -28,7 +28,8 @@ static void pour_tick_pulse(void) {
 }
 
 static void pour_go(void) {
-  static const uint32_t GO[] = { 70, 80, 70 };
+  // One long buzz, unmistakable against the 40ms ticks that led up to it.
+  static const uint32_t GO[] = { 500 };
   vibes_enqueue_custom_pattern((VibePattern){ GO, ARRAY_LENGTH(GO) });
   s_pouring = false;
   session_start_steep();

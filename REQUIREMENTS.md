@@ -120,8 +120,8 @@ the title menu entirely; Back from Brew Session still reaches the menu.
   then starts the steep timer. Rationale: the button gets pressed *as*
   the pour begins, not before or after.
 - R7a. The pour countdown is *felt*, not just seen: a tiny vibe pulse
-  each second and a distinct double-pulse at "go," so the wrist carries
-  the count through the steam without being watched.
+  each second and one long unmistakable buzz at "go," so the wrist
+  carries the count through the steam without being watched.
 - R8. During pour countdown: Select starts the steep immediately
   (skips the rest), Back cancels back to the ready screen.
 - R9. Setting: pour countdown length — Off / 3s / 5s / 10s (default 5s).
@@ -298,8 +298,8 @@ Key decisions:
 - **Vibes:** two custom patterns. The alarm is an escalating
   `VibePattern` looped by an app timer until dismissed or the 45s cap
   (R18) — not a single `vibes_*` call, so dismissal is instant. The
-  pour countdown (R7a) is a short pulse per second and a double-pulse
-  at "go," driven by the same countdown timer that redraws the digits.
+  pour countdown (R7a) is a short pulse per second and one long
+  buzz at "go," driven by the same countdown timer that redraws the digits.
 - **Recents:** fixed array of 6 (base_s, increment_s) pairs persisted
   under their own key; move-to-front on use, drop duplicates.
 
@@ -315,7 +315,7 @@ Decisions made during review, kept here so the reasoning survives:
 3. **No pause.** You can't pause leaves. Up/Down live adjust covers the
    real interruptions.
 4. **The pour countdown is felt (R7a).** A pulse per second and a
-   double-pulse at "go" — the wrist carries the count through steam.
+   long buzz at "go" — the wrist carries the count through steam.
 5. **The increment ask waits for commitment (R13).** Dismissing
    infusion 1 lands on a passive ready screen; the question comes only
    when Start says "yes, infusion 2." A brewer who's done for the day
