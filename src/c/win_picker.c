@@ -112,7 +112,7 @@ static void geom(GRect b, int *cy, int *box_h, int *fw, int *gap, int *x0,
     *gap = 0;
     *x0 = b.size.w / 2 - 45;
   } else {
-    *fw = compact ? 40 : 52;
+    *fw = compact ? 40 : 60;   // room for two blocky digits
     *gap = compact ? 14 : 16;
     *x0 = b.size.w / 2 - *fw - *gap / 2;
   }
@@ -164,6 +164,19 @@ static void draw_box(GContext *ctx, GRect r, const char *text, bool lit,
                      GTextOverflowModeTrailingEllipsis, GTextAlignmentCenter, NULL);
 }
 
+// TIME-mode fields render in the blocky digits (tabular, so the value
+// doesn't shimmy as it scrolls); the box and lighting match draw_box.
+static void draw_box_blocky(GContext *ctx, GRect r, const char *text,
+                            bool lit, int scale) {
+  if (lit) {
+    graphics_context_set_fill_color(ctx, COL_TEA);
+    graphics_fill_rect(ctx, r, 4, GCornersAll);
+  }
+  draw_blocky(ctx, text, r.origin.x + r.size.w / 2,
+              r.origin.y + (r.size.h - blocky_height(scale)) / 2, scale,
+              lit ? GColorBlack : GColorWhite);
+}
+
 static void draw_neighbor(GContext *ctx, int x, int y, int w, const char *text,
                           const char *font) {
   graphics_context_set_text_color(ctx, COL_FAINT);
@@ -197,17 +210,15 @@ static void draw(Layer *layer, GContext *ctx) {
     fmt_incr(buf, sizeof buf, peek(1));
     draw_neighbor(ctx, x0, nb, fw, buf, nfont);
   } else {
-    const char *vfont = compact ? FONT_KEY_GOTHIC_28_BOLD
-                                : FONT_KEY_BITHAM_34_MEDIUM_NUMBERS;
+    int scale = compact ? 2 : 3;
     int lx = s_field == 0 ? x0 : x0 + fw + gap;   // the lit column
     snprintf(buf, sizeof buf, "%d", s_min);
-    draw_box(ctx, GRect(x0, cy, fw, box_h), buf, s_field == 0, vfont);
-    graphics_context_set_text_color(ctx, COL_DIM);
-    graphics_draw_text(ctx, ":", fonts_get_system_font(vfont),
-                       GRect(x0 + fw, cy + 2, gap, box_h),
-                       GTextOverflowModeTrailingEllipsis, GTextAlignmentCenter, NULL);
+    draw_box_blocky(ctx, GRect(x0, cy, fw, box_h), buf, s_field == 0, scale);
+    draw_blocky(ctx, ":", x0 + fw + gap / 2,
+                cy + (box_h - blocky_height(scale)) / 2, scale, COL_DIM);
     snprintf(buf, sizeof buf, "%02d", s_sec);
-    draw_box(ctx, GRect(x0 + fw + gap, cy, fw, box_h), buf, s_field == 1, vfont);
+    draw_box_blocky(ctx, GRect(x0 + fw + gap, cy, fw, box_h), buf,
+                    s_field == 1, scale);
 
     // The wheel: smaller above, larger below, only on the column that turns.
     snprintf(buf, sizeof buf, s_field == 0 ? "%d" : "%02d", peek(-1));

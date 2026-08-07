@@ -171,14 +171,6 @@ static void click_config(void *ctx) {
 
 // ---- drawing ---------------------------------------------------------------
 
-static void draw_center(GContext *ctx, GRect b, const char *big,
-                        const char *font_key, int cy, GColor col) {
-  graphics_context_set_text_color(ctx, col);
-  graphics_draw_text(ctx, big, fonts_get_system_font(font_key),
-                     GRect(0, cy, b.size.w, 50),
-                     GTextOverflowModeTrailingEllipsis, GTextAlignmentCenter, NULL);
-}
-
 static void draw_line(GContext *ctx, GRect b, const char *text, int y,
                       GColor col, const char *font_key) {
   graphics_context_set_text_color(ctx, col);
@@ -193,8 +185,7 @@ static void draw(Layer *layer, GContext *ctx) {
   graphics_fill_rect(ctx, b, 0, GCornerNone);
   bool compact = IS_COMPACT(b);
   char buf[32], t[12];
-  const char *bigfont = compact ? FONT_KEY_BITHAM_34_MEDIUM_NUMBERS
-                                : FONT_KEY_BITHAM_42_MEDIUM_NUMBERS;
+  int scale = compact ? 3 : 4;   // blocky digits: 39px or 52px tall
   int y_top = IS_ROUND ? (compact ? 16 : 26) : 8;
   int cy = b.size.h / 2 - (compact ? 26 : 30);
 
@@ -204,42 +195,40 @@ static void draw(Layer *layer, GContext *ctx) {
     draw_line(ctx, b, "POUR NOW", y_top + (compact ? 6 : 14), COL_GOLD,
               FONT_KEY_GOTHIC_28_BOLD);
     snprintf(t, sizeof t, "%d", s_pour_left);
-    draw_center(ctx, b, t, bigfont, cy + 8, GColorWhite);
+    draw_blocky(ctx, t, b.size.w / 2, cy + 10, scale, GColorWhite);
     draw_line(ctx, b, "select = start now", b.size.h - (IS_ROUND ? 36 : 22),
               COL_FAINT, FONT_KEY_GOTHIC_14);
 
   } else if (g_session.phase == PH_ALARM) {
     draw_line(ctx, b, buf, y_top, COL_TEA, FONT_KEY_GOTHIC_18_BOLD);
     draw_line(ctx, b, "DONE", cy - 6, COL_GOLD, FONT_KEY_GOTHIC_28_BOLD);
-    draw_line(ctx, b, "tea time", cy + 28, COL_DIM, FONT_KEY_GOTHIC_18_BOLD);
+    // The full cup, steaming: the reward, drawn instead of described.
+    draw_teacup(ctx, GPoint(b.size.w / 2, cy + (compact ? 40 : 48)),
+                compact ? 12 : 16, 100, time(NULL));
     draw_line(ctx, b, "shake to stop", b.size.h - (IS_ROUND ? 36 : 22),
               COL_FAINT, FONT_KEY_GOTHIC_14);
 
   } else if (g_session.phase == PH_STEEPING) {
     draw_line(ctx, b, buf, y_top, COL_TEA, FONT_KEY_GOTHIC_18_BOLD);
     fmt_mmss(t, sizeof t, session_remaining_s());
-    draw_center(ctx, b, t, bigfont, cy, GColorWhite);
-    // A thin bar of the steep already behind you.
-    int total = g_session.end_epoch != 0
-                ? session_steep_s() : 0;
+    draw_blocky(ctx, t, b.size.w / 2, cy + 2, scale, GColorWhite);
+    draw_line(ctx, b, "up/down: +/-5s", cy + (compact ? 44 : 58),
+              COL_FAINT, FONT_KEY_GOTHIC_14);
+    // The cup fills as the steep goes — the progress gauge is the tea.
+    int total = g_session.end_epoch != 0 ? session_steep_s() : 0;
     if (total > 0) {
       int done = total - session_remaining_s();
       if (done < 0) done = 0;
       if (done > total) done = total;
-      int w = b.size.w * done / total;
-      graphics_context_set_fill_color(ctx, COL_FAINT);
-      graphics_fill_rect(ctx, GRect(0, b.size.h - 4, b.size.w, 4), 0, GCornerNone);
-      graphics_context_set_fill_color(ctx, COL_TEA);
-      graphics_fill_rect(ctx, GRect(0, b.size.h - 4, w, 4), 0, GCornerNone);
+      draw_teacup(ctx, GPoint(b.size.w / 2, b.size.h - (IS_ROUND ? 40 : 30)),
+                  compact ? 12 : 16, 100 * done / total, time(NULL));
     }
-    draw_line(ctx, b, "up/down: +/-5s", b.size.h - (IS_ROUND ? 38 : 24),
-              COL_FAINT, FONT_KEY_GOTHIC_14);
 
   } else {   // READY
     draw_line(ctx, b, buf, y_top, COL_TEA, FONT_KEY_GOTHIC_18_BOLD);
     int steep = session_steep_s();
     fmt_mmss(t, sizeof t, steep >= 0 ? steep : g_session.base_s);
-    draw_center(ctx, b, t, bigfont, cy, GColorWhite);
+    draw_blocky(ctx, t, b.size.w / 2, cy + 2, scale, GColorWhite);
     // The line under the time tells the increment's story: known, one-off,
     // or the honest "+ ?" of a question not yet asked (R13).
     if (g_session.override_s > 0) {
@@ -253,7 +242,7 @@ static void draw(Layer *layer, GContext *ctx) {
       buf[0] = '\0';
     }
     if (buf[0])
-      draw_line(ctx, b, buf, cy + (compact ? 40 : 50),
+      draw_line(ctx, b, buf, cy + (compact ? 44 : 58),
                 steep < 0 ? COL_GOLD : COL_DIM, FONT_KEY_GOTHIC_18_BOLD);
     draw_line(ctx, b, "select = start   down = skip",
               b.size.h - (IS_ROUND ? 36 : 22), COL_FAINT, FONT_KEY_GOTHIC_14);

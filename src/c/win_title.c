@@ -74,7 +74,11 @@ static void draw(Layer *layer, GContext *ctx) {
     y += row_h;
   }
 
-  // where's my tea?
+  // where's my tea? — status when a session is live, else a quiet cup
+  if (!session_live()) {
+    draw_teacup(ctx, GPoint(b.size.w / 2, b.size.h - (round ? 46 : 36)),
+                13, 100, -1);
+  }
   if (session_live()) {
     if (g_session.phase == PH_STEEPING) {
       fmt_mmss(t, sizeof t, session_remaining_s());
