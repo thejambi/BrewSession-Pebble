@@ -1,6 +1,8 @@
 # Publishing checklist
 
-Not yet published. Source: https://github.com/thejambi/BrewSession-Pebble
+Published: https://apps.rePebble.com/3022b32401cd44e2a59e05a0
+(appstore app ID 3022b32401cd44e2a59e05a0, first released 2026-08-07)
+Source: https://github.com/thejambi/BrewSession-Pebble
 
 ## First publish
 
@@ -11,15 +13,16 @@ pebble publish --non-interactive --no-gif-all-platforms --is-published \
   --name "BrewSession" --version 1.0.0 \
   --description "$(cat store/description.txt)" \
   --source "https://github.com/thejambi/BrewSession-Pebble" \
-  --category "Tools & Utilities" \
+  --category tools \
   --icon-small store/icon_small_48.png \
   --icon-large store/icon_large_144.png \
   --screenshots store/screenshots/*.png \
   --release-notes "First release: custom steep times, felt pour countdown, infusion tracking with ask-on-commit increments, recents as presets, and an alarm that survives the app being closed."
 ```
 
-After it succeeds, record the appstore URL/app ID here (Berean's checklist
-keeps it at the top).
+Category must be one of the CLI's slugs — daily, tools, notifications,
+remotes, health, games. A pretty name like "Tools & Utilities" passes
+through unnormalized and the server answers a bare 500.
 
 ## Releasing an update
 
@@ -58,7 +61,7 @@ screenshots, captured from the emulators:
 
 - **Title**: BrewSession
 - **Type**: watchapp
-- **Category**: Tools & Utilities
+- **Category**: Tools & Utilities (CLI slug: tools)
 - **Description**: `store/description.txt`
 - **Source**: https://github.com/thejambi/BrewSession-Pebble
 - **Icons/banner**: from `store/`
