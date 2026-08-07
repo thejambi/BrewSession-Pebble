@@ -99,6 +99,11 @@ the title menu entirely; Back from Brew Session still reaches the menu.
   (R17).
 - R3. Setting: **auto-open to Brew Session** — skip the menu on launch;
   Back navigates to the menu rather than exiting.
+- R3a. Independent of that setting, a launch lands directly in the brew
+  screen only while the session is time-sensitive (steeping or
+  alarming). A session resting between infusions waits on the menu's
+  Resume row — otherwise auto-open OFF would be a dead letter from the
+  first brew onward, since a session exists almost always (R17).
 
 ### Starting a session
 - R4. Brew Session screen lists, in order: Resume (if live), **New

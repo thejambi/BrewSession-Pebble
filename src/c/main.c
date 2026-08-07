@@ -4,10 +4,13 @@
 #include "session.h"
 
 // Launch shape (§5): the title menu is always the floor of the stack, so
-// Back always finds it. A live session lands you straight back in the brew
-// — whether you left on purpose, launched by hand, or the wakeup pulled the
-// app up because a steep finished while it was closed (R21, U5). Auto-open
-// skips the menu the way a kettle skips small talk (R3).
+// Back always finds it. Only a time-sensitive session — steeping, or
+// alarming — jumps straight into the brew, whether launched by hand or by
+// the wakeup (R21, U5): tea that's brewing can't wait on a menu. A session
+// merely resting between infusions waits on the title's Resume row; jumping
+// for it too would make the auto-open setting a lie whenever a session
+// exists, which is always. Auto-open skips the menu the way a kettle skips
+// small talk (R3).
 
 int main(void) {
   opts_init();
@@ -15,10 +18,11 @@ int main(void) {
   session_set_alarm_hook(win_brew_push);
 
   win_title_push();
-  if (session_live()) {
+  if (g_session.phase == PH_STEEPING || g_session.phase == PH_ALARM) {
     win_brew_push();
   } else if (g_opts.auto_open) {
-    win_session_push();
+    if (session_live()) win_brew_push();
+    else win_session_push();
   }
 
   app_event_loop();
