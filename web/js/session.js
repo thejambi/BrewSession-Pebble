@@ -138,7 +138,7 @@ function alarmBegin() {
   save();
   alarmStarted = now();
   alarmBuzz();
-  if (document.hidden && Notification?.permission === 'granted') {
+  if (document.hidden && window.Notification?.permission === 'granted') {
     new Notification(`Infusion ${session.infusion} done`,
                      { body: 'tea time', tag: 'brewsession' });
   }
@@ -203,8 +203,10 @@ export function startSteep() {
   session.end_epoch = now() + steep;
   save();
   heartbeatSync();
-  // The polite moment to ask for the wakeup stand-in.
-  if (Notification && Notification.permission === 'default') {
+  // The polite moment to ask for the wakeup stand-in. window.Notification,
+  // never bare: iOS Safari has no Notification at all, and a bare
+  // undeclared global throws — optional chaining guards values, not names.
+  if (window.Notification?.permission === 'default') {
     Notification.requestPermission();
   }
 }

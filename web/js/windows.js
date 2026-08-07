@@ -316,8 +316,8 @@ export const winBrew = {
   pourGo() {
     S.playPattern([500]);   // one long buzz, wrist-tested at 500ms
     this.pouring = false;
-    S.startSteep();
-    render();
+    // Repaint even if the steep's side quests throw (see mobile.js).
+    try { S.startSteep(); } finally { render(); }
   },
   pourCancel() {
     this.pouring = false;

@@ -330,8 +330,10 @@ const scrBrew = {
   pourGo() {
     S.playPattern([500]);
     this.pouring = false;
-    S.startSteep();
-    this.rerender();
+    // The repaint must happen even if the steep's side quests (permission
+    // prompts, wake locks) throw — a stuck "1" over a running steep is
+    // worse than a missing beep.
+    try { S.startSteep(); } finally { this.rerender(); }
   },
   pourCancel() {
     this.pouring = false;
