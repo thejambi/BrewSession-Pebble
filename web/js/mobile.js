@@ -168,6 +168,15 @@ function show(screen) {
   mount();
 }
 
+// The picker's SET turns the picker INTO the next screen — no history.back()
+// race against the async popstate, and no extra entry for the system back
+// button to wade through.
+function showReplace(screen) {
+  stack[stack.length - 1] = screen;
+  history.replaceState({ depth: stack.length }, '');
+  mount();
+}
+
 function internalPop() {
   if (stack.length <= 1) return;
   stack.pop();
@@ -224,7 +233,7 @@ const scrHome = {
         const initial = S.recentsCount() > 0 ? S.recentsGet(0).base_s : 150;
         showPickerTime('STEEP TIME', initial, (s) => {
           S.sessionNew(s, S.INCR_UNSET);
-          show(scrBrew);
+          showReplace(scrBrew);   // the picker becomes the brew
         });
       } }, 'New custom time'));
     for (let i = 0; i < S.recentsCount(); i++) {
@@ -269,11 +278,9 @@ function showPickerTime(title, initial, done) {
         topbar(title),
         h('div', { class: 'wheelbox' }, wMin.el, h('div', { class: 'wheel-colon' }, colon.el), wSec.el),
         h('div', { class: 'actions' },
-          h('button', { class: 'btn btn-primary btn-big', onclick: () => {
-            const v = Math.min(S.STEEP_MAX_S, Math.max(S.STEEP_MIN_S, min * 60 + sec));
-            history.back();
-            setTimeout(() => done(v), 0);
-          } }, 'Set')));
+          h('button', { class: 'btn btn-primary btn-big', onclick: () =>
+            done(Math.min(S.STEEP_MAX_S, Math.max(S.STEEP_MIN_S, min * 60 + sec)))
+          }, 'Set')));
     },
   });
 }
@@ -295,10 +302,7 @@ function showPickerIncr(title, done) {
           'added to each next infusion — negative is allowed'),
         h('div', { class: 'wheelbox' }, w.el),
         h('div', { class: 'actions' },
-          h('button', { class: 'btn btn-primary btn-big', onclick: () => {
-            history.back();
-            setTimeout(() => done(incr), 0);
-          } }, 'Set')));
+          h('button', { class: 'btn btn-primary btn-big', onclick: () => done(incr) }, 'Set')));
     },
   });
 }
@@ -343,7 +347,8 @@ const scrBrew = {
   startPressed() {
     if (S.needsIncrement()) showPickerIncr('EACH NEXT INFUSION', (s) => {
       S.setIncrement(s);
-      this.pourBegin();
+      this.pourBegin();   // pouring is set before the pop lands, so the
+      goBack();           // remounted brew comes up already mid-pour
     });
     else this.pourBegin();
   },
@@ -420,14 +425,17 @@ const scrBrew = {
         sub = h('div', { class: 'subline' }, `${fmtIncr(S.session.increment_s)} each`);
       stage.append(
         h('div', { class: 'label-infusion' }, `INFUSION ${S.session.infusion}`),
-        big.el, sub,
+        big.el,
+        // Native append() would stringify a null into the word "null" —
+        // only real sublines get through.
+        ...(sub ? [sub] : []),
         h('div', { class: 'actions' },
           h('button', { class: 'btn btn-primary btn-big', onclick: () => this.startPressed() }, 'Start'),
           h('div', { class: 'pair' },
             h('button', { class: 'btn btn-outline', onclick: () => {
               let cur = S.steepS();
               if (cur < 0) cur = S.session.base_s;
-              showPickerTime('THIS INFUSION', cur, (s) => { S.adjustOnce(s); this.rerender(); });
+              showPickerTime('THIS INFUSION', cur, (s) => { S.adjustOnce(s); goBack(); });
             } }, 'Adjust'),
             h('button', { class: 'btn btn-outline', onclick: () => { S.skip(); this.rerender(); } }, 'Skip')),
           this.abandonLink()));
