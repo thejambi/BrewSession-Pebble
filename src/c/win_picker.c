@@ -221,10 +221,14 @@ static void draw(Layer *layer, GContext *ctx) {
                     s_field == 1, scale);
 
     // The wheel: smaller above, larger below, only on the column that turns.
+    // Neighbors render blocky too — a size down from the lit field, so the
+    // whole wheel speaks one typeface and the center still outranks it.
+    int nscale = scale - 1;
+    int nh = blocky_height(nscale);
     snprintf(buf, sizeof buf, s_field == 0 ? "%d" : "%02d", peek(-1));
-    draw_neighbor(ctx, lx, na, fw, buf, nfont);
+    draw_blocky(ctx, buf, lx + fw / 2, cy - 6 - nh, nscale, COL_FAINT);
     snprintf(buf, sizeof buf, s_field == 0 ? "%d" : "%02d", peek(1));
-    draw_neighbor(ctx, lx, nb, fw, buf, nfont);
+    draw_blocky(ctx, buf, lx + fw / 2, cy + box_h + 6, nscale, COL_FAINT);
   }
 
   graphics_context_set_text_color(ctx, COL_FAINT);
