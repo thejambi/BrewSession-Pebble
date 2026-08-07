@@ -1,8 +1,17 @@
 # BrewSession, the web edition
 
-A shot-for-shot PWA port of the Pebble watchapp, down to the look: the
-200x228 emery framebuffer drawn on a canvas, integer-scaled with square
-pixels, sitting in a Time 2-ish body whose four buttons work. Just for fun.
+Two faces, one truth:
+
+- **`index.html`** — the shot-for-shot watch port: the 200x228 emery
+  framebuffer on a canvas, integer-scaled square pixels, in a Time 2-ish
+  body whose four buttons work. Just for fun.
+- **`app.html`** — the same app designed for a phone: no bezel, no
+  emulator feel. The watch's visual language (blocky digits, the filling
+  teacup, tea green on black) grown into full-bleed mobile UI — the lit
+  selection row becomes the primary button, the picker becomes two big
+  drag wheels, and the phone chips in a wake lock at the kettle and the
+  system back gesture. Same `session.js` truth and localStorage, so the
+  two faces share sessions and recents.
 
 The C maps across almost file for file:
 

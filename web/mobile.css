@@ -1,0 +1,255 @@
+/* BrewSession for a phone: the watch's visual language — black, tea green,
+   gold, chunky pixel digits, the cup — grown into a full-bleed mobile app.
+   The watch's lit selection row becomes the primary button; everything
+   that was a physical button becomes something a thumb can find. */
+
+:root {
+  --tea: #00aa55;
+  --gold: #ffaa00;
+  --dim: #aaaaaa;
+  --faint: #555555;
+  --bad: #ff0000;
+  --surface: #101312;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  background: #000;
+  color: #fff;
+  font-family: "Arial Narrow", "Helvetica Neue Condensed", Arial, sans-serif;
+  height: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#app {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: calc(env(safe-area-inset-top) + 12px) 20px
+           calc(env(safe-area-inset-bottom) + 20px);
+  max-width: 460px;
+  margin: 0 auto;
+}
+
+canvas { image-rendering: pixelated; display: block; }
+
+/* ---- chrome ---- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  margin-bottom: 6px;
+}
+.back {
+  font-size: 30px;
+  font-weight: bold;
+  color: var(--dim);
+  background: none;
+  border: none;
+  padding: 4px 14px 8px 0;
+  line-height: 1;
+}
+.back:active { color: #fff; }
+.screen-title {
+  color: var(--gold);
+  font-weight: bold;
+  font-size: 19px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.wordmark {
+  color: var(--tea);
+  font-weight: bold;
+  font-size: 34px;
+  letter-spacing: 1px;
+  text-align: center;
+  margin-top: 10px;
+}
+.tagline {
+  color: var(--dim);
+  text-align: center;
+  font-size: 15px;
+  margin: 4px 0 18px;
+}
+
+/* ---- lists & buttons: the watch's selection language ---- */
+
+.rows { display: flex; flex-direction: column; gap: 12px; }
+
+.btn, .row-btn {
+  display: block;
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+  padding: 16px;
+  font-size: 19px;
+}
+.btn-primary { background: var(--tea); color: #000; }
+.btn-primary:active { background: #00c765; }
+.btn-gold { background: var(--gold); color: #000; }
+.btn-outline {
+  background: none;
+  color: #fff;
+  border: 2px solid var(--faint);
+}
+.btn-outline:active { border-color: #fff; }
+.btn-big { padding: 20px; font-size: 22px; }
+
+.row-btn {
+  background: var(--surface);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 58px;
+}
+.row-btn:active { background: #1a1f1d; }
+.row-btn .sub { color: var(--dim); font-size: 15px; font-weight: normal; }
+
+.footer-links {
+  margin-top: auto;
+  padding-top: 26px;
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+}
+.footer-links button {
+  background: none;
+  border: none;
+  color: var(--faint);
+  font: inherit;
+  font-weight: bold;
+  font-size: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 8px;
+}
+.footer-links button:active { color: var(--dim); }
+
+/* ---- brew screen ---- */
+
+.stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+}
+.label-infusion {
+  color: var(--tea);
+  font-weight: bold;
+  font-size: 21px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.label-gold { color: var(--gold); font-weight: bold; font-size: 30px; letter-spacing: 2px; }
+.subline { color: var(--dim); font-size: 17px; font-weight: bold; }
+.subline.gold { color: var(--gold); }
+.hintline { color: var(--faint); font-size: 14px; }
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding-top: 8px;
+}
+.actions .pair { display: flex; gap: 12px; }
+.actions .pair > * { flex: 1; }
+
+.abandon {
+  background: none;
+  border: none;
+  color: var(--faint);
+  font: inherit;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 12px;
+  margin-top: 4px;
+}
+.abandon:active { color: var(--bad); }
+
+.confirmbar {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  background: var(--bad);
+  color: #fff;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px calc(env(safe-area-inset-bottom) + 14px);
+}
+.confirmbar button {
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font: inherit;
+  font-weight: bold;
+  padding: 10px 18px;
+  text-transform: uppercase;
+}
+
+/* ---- status card on home ---- */
+
+.status-card {
+  background: var(--surface);
+  border: 2px solid var(--tea);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 14px;
+  font: inherit;
+}
+.status-card .state { color: var(--gold); font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+
+/* ---- wheels ---- */
+
+.wheelbox {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+.wheel { touch-action: none; }
+.wheel-colon { align-self: center; }
+
+/* ---- settings / about ---- */
+
+.setting {
+  background: var(--surface);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.setting .name { color: #fff; font-weight: bold; font-size: 16px; text-transform: uppercase; }
+.setting .val { color: var(--tea); font-weight: bold; font-size: 20px; text-transform: uppercase; }
+.setting:active { background: #1a1f1d; }
+
+.about-text { color: #fff; font-size: 18px; font-weight: bold; text-align: center; line-height: 1.5; }
+.about-faint { color: var(--faint); font-size: 14px; text-align: center; line-height: 1.5; margin-top: 10px; }
